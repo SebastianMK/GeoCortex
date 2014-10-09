@@ -1,0 +1,1799 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Geocortex.Workflow</name>
+    </assembly>
+    <members>
+        <member name="T:Geocortex.Workflow.Activities.ButtonActivityBase">
+            <summary>
+            A base class for external activities that define buttons and return a button result value.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Activities.ExternalActivityBase">
+            <summary>
+            Base class for activities that perform their execution outside of the workflow runtime.
+            These activities cause the workflow to go idle until the external execution is complete.
+            </summary>
+            <remarks>Custom server code can be executed before and after the external work using the 
+            <see cref="M:Geocortex.Workflow.Activities.ExternalActivityBase.PreExternalExecute(System.Activities.NativeActivityContext)"/> and <see cref="M:Geocortex.Workflow.Activities.ExternalActivityBase.PostExternalExecute(System.Activities.NativeActivityContext,Geocortex.Workflow.ExternalActivityInfo)"/> methods.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase.PreExternalExecute(System.Activities.NativeActivityContext)">
+            <summary>
+            Execute custom code before the activity is sent to the external client.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase.PostExternalExecute(System.Activities.NativeActivityContext,Geocortex.Workflow.ExternalActivityInfo)">
+            <summary>
+            Execute custom code after the activity has returned from the external client.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+            <param name="info">The external activity info which includes out arguments.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase.Execute(System.Activities.NativeActivityContext)">
+            <summary>
+            Runs the activity’s execution logic.
+            </summary>
+            <remarks>
+            Derived classes should avoid overriding this method. The base class implementation of the Execute
+            method performs functions critical to the operation of external activities. If this method is
+            overridden the implementation should call base.Execute(context).
+            </remarks>
+            <param name="context">The execution context in which the activity executes.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase.OnResume(System.Activities.NativeActivityContext,System.Activities.Bookmark,System.Object)">
+            <summary>
+            Called when the activity resumes execution.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+            <param name="bookmark">The bookmark.</param>
+            <param name="state">An object that can be used in support of the bookmark resumption process, for example a message string.</param>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase.ExternalId">
+            <summary>
+            Gets or sets the external id.
+            </summary>
+            <value>The external id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase.Debug">
+            <summary>
+            Gets or sets a value indicating whether this activity should be debugged on the client.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase.AutomaticallyProcessOutArguments">
+            <summary>
+            Gets or sets a value indicating whether to automatically process the out argument from the external client.
+            </summary>
+            <value>True if out arguments should be processed automatically, false otherwise.</value>
+            <remarks>If set to false, PostExternalExecute should be overridden to process the 
+            arguments. The default is true.</remarks>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase.ExtraOutArguments">
+            <summary>
+            Gets a collection of output argument that we returned by the client but were not defined in the actual activity.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase.CanInduceIdle">
+            <summary>
+            Gets or sets a value that indicates whether the activity can cause the workflow to become idle.
+            </summary>
+            <value></value>
+            <returns>true if the activity can cause the workflow to become idle. This value is false by default.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ButtonActivityBase.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.Activities.ButtonActivityBase"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ButtonActivityBase.PreExternalExecute(System.Activities.NativeActivityContext)">
+            <summary>
+            Execute custom code before the activity is sent to the external client.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ButtonActivityBase.CacheMetadata(System.Activities.NativeActivityMetadata)">
+            <summary>
+            Creates and validates a description of the activity’s arguments, variables, child activities, and activity delegates.
+            </summary>
+            <param name="metadata">The activity’s metadata that encapsulates the activity’s arguments, variables, child activities, and activity delegates.</param>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ButtonActivityBase.Buttons">
+            <summary>
+            Gets the buttons of the activity.
+            </summary>
+            <value>The buttons.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ButtonActivityBase.ButtonResultValue">
+            <summary>
+            Gets or sets the button result value of the button that was used in the activity.
+            </summary>
+            <value>The button result.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Activities.ArgumentWrapper`1">
+            <summary>
+            A class to wrap an <see cref="P:Geocortex.Workflow.Activities.ArgumentWrapper`1.Argument"/>. 
+            This is a convenience class used by activities that have variable sized collections 
+            of arguments that are unknown at compile time.
+            </summary>
+            <typeparam name="T">The type of the argument.</typeparam>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ArgumentWrapper`1.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ArgumentWrapper`1.IsRequired">
+            <summary>
+            Gets or sets a value indicating whether the argument is required.
+            </summary>
+            <value>
+                <c>true</c> if the argument is required; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ArgumentWrapper`1.Argument">
+            <summary>
+            Gets or sets the argument.
+            </summary>
+            <value>The argument.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Activities.ExternalActivityBase`1">
+            <summary>
+            Base class for activities that perform their execution outside of the workflow runtime.
+            These activities cause the workflow to go idle until the external execution is complete.
+            </summary>
+            <typeparam name="TResult">The result type returned by the activity.</typeparam>
+            <remarks>Custom server code can be executed before and after the external work using the
+            <see cref="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.PreExternalExecute(System.Activities.NativeActivityContext)"/> and <see cref="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.PostExternalExecute(System.Activities.NativeActivityContext,Geocortex.Workflow.ExternalActivityInfo)"/> methods.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.PreExternalExecute(System.Activities.NativeActivityContext)">
+            <summary>
+            Execute custom code before the activity is sent to the external client.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.PostExternalExecute(System.Activities.NativeActivityContext,Geocortex.Workflow.ExternalActivityInfo)">
+            <summary>
+            Execute custom code after the activity has returned from the external client.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+            <param name="info">The external activity info which includes out arguments.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.Execute(System.Activities.NativeActivityContext)">
+            <summary>
+            Execute when the activity is executed in the workflow. It implements the required method
+            for our external activity paradigm.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Activities.ExternalActivityBase`1.OnResume(System.Activities.NativeActivityContext,System.Activities.Bookmark,System.Object)">
+            <summary>
+            Called when the activity resumes execution.
+            </summary>
+            <param name="context">The execution context in which the activity executes.</param>
+            <param name="bookmark">The bookmark.</param>
+            <param name="state">An object that can be used in support of the bookmark resumption process, for example a message string.</param>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase`1.ExternalId">
+            <summary>
+            Gets or sets the external id.
+            </summary>
+            <value>The external id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase`1.Debug">
+            <summary>
+            Gets or sets a value indicating whether this activity should be debugged on the client.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase`1.AutomaticallyProcessOutArguments">
+            <summary>
+            Gets or sets a value indicating whether to automatically process the out argument from the external client.
+            </summary>
+            <value>True if out arguments should be processed automatically, false otherwise.</value>
+            <remarks>If set to false, PostExternalExecute should be overridden to process the 
+            arguments. The default is true.</remarks>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.ExternalActivityBase`1.CanInduceIdle">
+            <summary>
+            Gets or sets a value that indicates whether the activity can cause the workflow to become idle.
+            </summary>
+            <value></value>
+            <returns>true if the activity can cause the workflow to become idle. This value is false by default.</returns>
+        </member>
+        <member name="T:Geocortex.Workflow.Activities.GPArgumentWrapper`1">
+            <summary>
+            A class to wrap an argument of a geoprocessor. 
+            This is a convenience class used by activities that have variable sized collections 
+            of geoprocessing arguments that are unknown at compile time.
+            </summary>
+            <typeparam name="T">The type of the argument.</typeparam>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.GPArgumentWrapper`1.DisplayName">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.GPArgumentWrapper`1.DataType">
+            <summary>
+            Gets or sets the data type name of the geoprocessing parameter.
+            </summary>
+            <value>The data type.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.GPArgumentWrapper`1.GPParameterType">
+            <summary>
+            Gets or sets the type of the geoprocessing parameter.
+            </summary>
+            <value>The type.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Activities.WorkflowDesignerAttribute">
+            <summary>
+            Specifies how the activity should be presented in Workflow Designer applications.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.WorkflowDesignerAttribute.DisplayName">
+            <summary>
+            Gets or sets the display name for the activity.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.WorkflowDesignerAttribute.ToolboxCategory">
+            <summary>
+            Gets or sets the name of the toolbox category this activity should go under.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.WorkflowDesignerAttribute.IconResourceName">
+            <summary>
+            Gets or sets the name of the embedded resource that contains the icon image. 
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Activities.WorkflowDesignerAttribute.UseAutoDesigner">
+            <summary>
+            Gets or sets a value indicating whether to use the automatic activity designer.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.ActivityInfo">
+            <summary>
+            A representation of a workflow activity.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.Serialization.IJsonSerializable">
+            <summary>
+            Describes a class which can be serialized to a JSON (JavaScript Object Notation) string.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.IJsonSerializable.ToJson">
+            <summary>
+            Converts the members of the class to a JSON string, and returns it.
+            </summary>
+            <returns>The JSON representation of this object.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.ActivityInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ActivityInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ActivityInfo.ToJson">
+            <summary>
+            Converts the members of the class to a JSON string, and returns it.
+            </summary>
+            <returns>The JSON representation of this object.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.Id">
+            <summary>
+            Gets or sets the id.
+            </summary>
+            <value>The id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.DisplayName">
+            <summary>
+            Gets or sets the display name.
+            </summary>
+            <value>The display name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.TypeName">
+            <summary>
+            Gets or sets the name of the type.
+            </summary>
+            <value>The name of the type.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.IsExternal">
+            <summary>
+            Gets or sets a value indicating whether this instance is external.
+            </summary>
+            <value>
+                <c>true</c> if this instance is external; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.SyncToken">
+            <summary>
+            Gets or sets the sync token.
+            </summary>
+            <value>The sync token.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.Inputs">
+            <summary>
+            Gets the inputs.
+            </summary>
+            <value>The inputs.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.Outputs">
+            <summary>
+            Gets the outputs.
+            </summary>
+            <value>The outputs.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ActivityInfo.ChildActivities">
+            <summary>
+            Gets the child activities.
+            </summary>
+            <value>The child activities.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.ArcGisClientGeometryConverter">
+            <summary>
+            Converts from ArcGIS WPF Geometry to Geocortex geometry and vice versa.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ArcGisClientGeometryConverter.Clone">
+            <summary>
+            Creates a new object that is a deep copy of the current instance.
+            Deep cloning implies that all object references (and any objects
+            they may reference, and so on) will also be deep cloned.
+            </summary>
+            <returns>
+            A new object that is a deep copy of this instance.
+            </returns>
+            <remarks>
+            Note to implementors: the
+            <see cref="M:Geocortex.DeepCloneHelper.Clone"/> method can be used
+            to automatically perform a deep clone operation on serializable
+            types.
+            </remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.ArcGisClientGeometryConverter.Convert(ESRI.ArcGIS.Client.Geometry.Geometry)">
+            <summary>
+            Converts the specified input from an ArcGIS WPF geometry to a Geocortex geometry.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>The Geocortex geometry.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.ArcGisClientGeometryConverter.Convert(Geocortex.Gis.Geometries.Geometry)">
+            <summary>
+            Converts the specified input from a Geocortex geometry to an ArcGIS WPF geometry.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>The ArcGIS client WPF geometry.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.ArcGisClientGeometryConverter.ToArcGisClientGeometry(Geocortex.Gis.Geometries.Geometry)">
+            <summary>
+            Converts from a Geocortex geometry to an ArcGIS WPF geometry.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>The ArcGIS client WPF geometry.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.ArcGisClientGeometryConverter.FromArcGisClientGeometry(ESRI.ArcGIS.Client.Geometry.Geometry)">
+            <summary>
+            Converts from an ArcGIS WPF geometry to a Geocortex geometry.
+            </summary>
+            <param name="input">The input.</param>
+            <returns>The ArcGIS Geocortex geometry.</returns>
+        </member>
+        <member name="T:Geocortex.Workflow.ArgumentInfo">
+            <summary>
+            A representation of a workflow or activity argument.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ArgumentInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ArgumentInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ArgumentInfo.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ArgumentInfo"/> class.
+            </summary>
+            <param name="json">The JSON representation.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ArgumentInfo.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ArgumentInfo"/> class.
+            </summary>
+            <param name="jsonObject">The json object.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ArgumentInfo.GetTypeFromName(System.String)">
+            <summary>
+            Try a few different ways to create a type from a type name.
+            </summary>
+            <param name="typeName">The type name.</param>
+            <returns>The type.</returns>
+            <remarks> 
+            1) Try the full type name
+            2) Try the class and assembly
+            3) Try the class
+            </remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.ArgumentInfo.ToJson">
+            <summary>
+            Converts the members of the class to a JSON string, and returns it.
+            </summary>
+            <returns>The JSON representation of this object.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.IsRequired">
+            <summary>
+            Gets or sets a value indicating whether this instance is required.
+            </summary>
+            <value>
+            <c>true</c> if this instance is required; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.Name">
+            <summary>
+            Gets or sets the name.
+            </summary>
+            <value>The name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.TypeName">
+            <summary>
+            Gets or sets the name of the type.
+            </summary>
+            <value>The name of the type.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.RuntimeTypeName">
+            <summary>
+            Gets or sets the name of the runtime type.
+            </summary>
+            <value>The name of the runtime type.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.Value">
+            <summary>
+            Gets or sets the value.
+            </summary>
+            <value>The value.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ArgumentInfo.Expression">
+            <summary>
+            Gets or sets the expression.
+            </summary>
+            <value>The expression.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.ExitWorkflowException">
+            <summary>
+            Represents an exception that is meant to end a workflow successfully.
+            </summary>
+            <remarks>
+            This class is intended for internal use only and should net be referenced by other applications.
+            </remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.ExitWorkflowException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExitWorkflowException"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ExitWorkflowException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExitWorkflowException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExitWorkflowException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExitWorkflowException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExitWorkflowException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExitWorkflowException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
+        <member name="M:Geocortex.Workflow.ExitWorkflowException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is a null reference (Nothing in Visual Basic). </exception>
+            <PermissionSet>
+                <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
+                <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+            </PermissionSet>
+        </member>
+        <member name="T:Geocortex.Workflow.ExternalObject">
+            <summary>
+            Represents an object that has been transferred from an external client to the server that will not be deserialized into a server type.
+            Instead, the Json from the client is stored and is accessible through this class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalObject"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalObject"/> class.
+            </summary>
+            <param name="json">The json.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.#ctor(System.Object)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalObject"/> class.
+            </summary>
+            <param name="json">The json.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.#ctor(System.Object,System.Object,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalObject"/> class.
+            </summary>
+            <param name="json">The json.</param>
+            <param name="runtimeObject">The runtime object</param>
+            <param name="runtimeTypeName">The runtime type name</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.GetValue(System.String)">
+            <summary>
+            Gets the value from the Json object tree of the specified property name.  A simple dot
+            notation is used to traverse the tree.  For example, NewExtent.XMin.
+            </summary>
+            <param name="propertyName">Name of the property to fetch in dot notation.</param>
+            <returns>The specified object from the Json object tree.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalObject.GetValue``1(System.String)">
+            <summary>
+            Gets the value from the Json object tree of the specified property name.  A simple dot
+            notation is used to traverse the tree.  For example, NewExtent.XMin.
+            </summary>
+            <typeparam name="T">The type to cast the value to.</typeparam>
+            <param name="propertyName">Name of the property to fetch in dot notation.</param>
+            <returns>Returns the specified object cast as type T from the Json object tree.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalObject.Json">
+            <summary>
+            Gets or sets the Json string representation of the external object.
+            </summary>
+            <value>The json.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalObject.RuntimeTypeName">
+            <summary>
+            Gets the runtime type name of the external object.
+            </summary>
+            <value>The runtime type.</value>
+            <remarks>This is the client runtime type, so it's possible that it isn't supported on the server.</remarks>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalObject.RuntimeObject">
+            <summary>
+            Gets the runtime object of the external object.
+            </summary>
+            <value>The object.</value>
+            <remarks>Note: The runtime object is a copy, changes will not be reflected in serialized version. This is only available if the object type is known on the server.</remarks>
+        </member>
+        <member name="T:Geocortex.Workflow.GeometryCollection">
+            <summary>
+            The GeometryCollection class holds a collection of
+            <see cref="T:ESRI.ArcGIS.Client.Geometry.Geometry"/> objects.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.GeometryCollection.#ctor">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:Geocortex.Workflow.GeometryCollection"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.GeometryCollection.#ctor(System.Collections.Generic.IEnumerable{ESRI.ArcGIS.Client.Geometry.Geometry})">
+            <summary>
+            Initializes a new instance of the
+            <see cref="T:Geocortex.Workflow.GeometryCollection"/> class.
+            </summary>
+            <param name="collection">
+            The collection whose elements are copied to the new collection.
+            </param>
+            <exception cref="T:System.ArgumentNullException">
+            If collection is null.
+            </exception>
+        </member>
+        <member name="T:Geocortex.Workflow.IWorkflowDefinition">
+            <summary>
+            Interface to a workflow definition.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.IWorkflowDefinition.ID">
+            <summary>
+            Gets or sets the ID of the workflow.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.IWorkflowDefinition.DisplayName">
+            <summary>
+             Gets or sets the display name of the workflow.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.IWorkflowDefinition.Uri">
+            <summary>
+             Gets or sets the file path to the xaml file containing the workflow.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Properties.LogMessages">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.ExternalActivityBase_OnResume_UnableToSetOutArgument">
+            <summary>
+              Looks up a localized string similar to Unable to set OutArgument value from ExternalActivityParameter. Name: {0}, Type: {1}, Value: {2}. {3}.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.SerializationUtility_JsonDecode_LargeJsonObject">
+            <summary>
+              Looks up a localized string similar to Decoding {0} character JSON object. Large JSON objects may cause or indicate performance problems..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.WorkflowController_Initialize_CreatingStaThread">
+            <summary>
+              Looks up a localized string similar to Creating STA thread..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.WorkflowStateInstanceStore_LoadWorkflow_UnableToDeserializeObject">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize object: {0}.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.LogMessages.WorkflowStateInstanceStore_SaveWorkflow_UnableToSerializeObject">
+            <summary>
+              Looks up a localized string similar to Unable to serialize object: {0}.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Properties.Errors">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ArgumentInfo_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create ArgumentInfo..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ArgumentInfo_UnableToDeserialize_Type">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize type &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.AsyncResult_Complete_CallbackThrewException">
+            <summary>
+              Looks up a localized string similar to Async callback threw an Exception..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.AsyncResult_End_AsyncResultAlreadyEnded">
+            <summary>
+              Looks up a localized string similar to AsyncResult already ended..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.AsyncResult_End_InvalidAsyncResult">
+            <summary>
+              Looks up a localized string similar to Invalid AsyncResult..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ExternalActivityBase_SetupExternalMetadata_MissingExternalActivityExtension">
+            <summary>
+              Looks up a localized string similar to This activity requires an ExternalActivityExtension..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ExternalActivityInfo_ProcessArguments_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create ExternalActivityInfo arguments..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.ExternalActivityInfo_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create ExternalActivityInfo..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.SerializationUtility_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize object of type &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.SerializationUtility_UnableToDetermineGeometryType">
+            <summary>
+              Looks up a localized string similar to Unable to determine geometry type when deserializing..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.SerializationUtility_UnableToSerialize">
+            <summary>
+              Looks up a localized string similar to Unable to serialize object of type &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_GetActivityInfo_InvalidWorkflow">
+            <summary>
+              Looks up a localized string similar to Invalid Workflow..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_Initialize_InvalidApartmentState">
+            <summary>
+              Looks up a localized string similar to Unable to initialize WorkflowController. Application.Current is null, and the ApartmentState is STA..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_InvalidWorkflowStatus">
+            <summary>
+              Looks up a localized string similar to The workflow cannot be run while its status is &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_UnableToLoadWorkflowFromStore">
+            <summary>
+              Looks up a localized string similar to Unable to load specified workflow from instance store..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_UnableToResume_BookmarkError">
+            <summary>
+              Looks up a localized string similar to Unable to resume bookmark &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_UnableToResume_InvalidPendingExternalActivityInstanceId">
+            <summary>
+              Looks up a localized string similar to The workflow cannot be resumed. Pending external activity does not have an instance id..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_UnableToResume_NoCompletedPendingExternalActivities">
+            <summary>
+              Looks up a localized string similar to The workflow cannot be resumed. There are no completed external activities..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_RunWorkflow_UnableToResume_NoPendingExternalActivities">
+            <summary>
+              Looks up a localized string similar to The workflow cannot be resumed. There are no pending external activities..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_WorkflowApplication_CompletedAction_WorkflowTerminated">
+            <summary>
+              Looks up a localized string similar to Termination exception: &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_WorkflowApplication_OnAbortedAction">
+            <summary>
+              Looks up a localized string similar to Aborted exception: &apos;{0}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowController_WorkflowApplication_OnUnhandledExceptionAction">
+            <summary>
+              Looks up a localized string similar to Unhandled exception: &apos;{0}&apos; in activity &apos;{1}&apos;..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_GetActivity_InvalidUri">
+            <summary>
+              Looks up a localized string similar to Unable to obtain the workflow&apos;s internal activity implementation because the WorkflowState was created without a URI..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_ProcessArguments_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create WorkflowState arguments..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_UnableToDeserialize">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create WorkflowState..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_UnableToDeserializeExternalActivities">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create External Activities..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_UnableToDeserializeExternalActivity">
+            <summary>
+              Looks up a localized string similar to Unable to deserialize json to create ExternalActivityInfo..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowState_UnableToLoadWorkflow">
+            <summary>
+              Looks up a localized string similar to Unable to load workflow..
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Properties.Errors.WorkflowStateInstanceStore_UnableToLoadInstance">
+            <summary>
+              Looks up a localized string similar to Unable to load workflow running instance data..
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.ExternalActivityInfo">
+            <summary>
+            A representation of a workflow activity that is executed by a client application.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalActivityInfo.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/> class.
+            </summary>
+            <param name="json">The json.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalActivityInfo.#ctor(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/> class.
+            </summary>
+            <param name="jsonObject">The json object.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalActivityInfo.#ctor(Geocortex.Workflow.ActivityInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/> class.
+            </summary>
+            <param name="info">The info.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalActivityInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.ExternalActivityInfo.ToJson">
+            <summary>
+            Converts the members of the class to a JSON string, and returns it.
+            </summary>
+            <returns>The JSON representation of this object.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.Id">
+            <summary>
+            Gets or sets the activity id.
+            </summary>
+            <value>The id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.InstanceId">
+            <summary>
+            Gets or sets the unique instance id.
+            </summary>
+            <value>The instance id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.DisplayName">
+            <summary>
+            Gets or sets the display name.
+            </summary>
+            <value>The display name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.TypeName">
+            <summary>
+            Gets or sets the name of the type.
+            </summary>
+            <value>The name of the type.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.ExternalId">
+            <summary>
+            Gets or sets the external ID.
+            </summary>
+            <value>The external ID.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.Debug">
+            <summary>
+            Gets or sets a value indicating whether this activity should be debugged on the client.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.IsComplete">
+            <summary>
+            Gets or sets a value indicating whether this instance is complete.
+            </summary>
+            <value>
+                <c>true</c> if this instance is complete; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.SyncToken">
+            <summary>
+            Gets or sets the sync token.
+            </summary>
+            <value>The sync token.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.Inputs">
+            <summary>
+            Gets the inputs.
+            </summary>
+            <value>The inputs.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.ExternalActivityInfo.Outputs">
+            <summary>
+            Gets the outputs.
+            </summary>
+            <value>The outputs.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.LogTrackingParticipant">
+            <summary>
+            A workflow extension that logs tracking records.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.LogTrackingParticipant.Track(System.Activities.Tracking.TrackingRecord,System.TimeSpan)">
+            <summary>
+            Processes the tracking record.
+            </summary>
+            <param name="record">The generated tracking record.</param>
+            <param name="timeout">The time period after which the provider aborts the attempt.</param>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.RequestInfo">
+            <summary>
+            A workflow extension object that facilitates the transfer of information 
+            about a HTTP request that initiated a workflow to the workflow runtime. 
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.RequestInfo.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.Runtime.RequestInfo"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.RequestInfo.FromHttpRequest(System.Web.HttpRequest)">
+            <summary>
+            Creates a RequestInfo from a HTTP request.
+            </summary>
+            <param name="request">The request.</param>
+            <returns>A RequestInfo.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.ApplicationPath">
+            <summary>
+            Gets or sets the application's virtual root path on the server.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.ApplicationUri">
+            <summary>
+            Gets or sets the application's URI, excluding the current path and query string.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Path">
+            <summary>
+            Gets or sets the virtual path of the current request.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Uri">
+            <summary>
+            Gets or sets the URI.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.UserAgent">
+            <summary>
+            Gets or sets the user agent.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.UserHostAddress">
+            <summary>
+            Gets or sets the user host address.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.UserLanguages">
+            <summary>
+            Gets a sorted string array of client language preferences.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Culture">
+            <summary>
+            Gets the user preferred culture of the request.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Headers">
+            <summary>
+            Gets the collection of HTTP headers.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Referrer">
+            <summary>
+            Gets or sets the HTTP referrer.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.RequestInfo.Token">
+            <summary>
+            Gets or sets the token associated with the request.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.WorkflowInstanceStoreSurrogateSelector.GetSurrogate(System.Type,System.Runtime.Serialization.StreamingContext,System.Runtime.Serialization.ISurrogateSelector@)">
+            <summary>
+            Returns the surrogate for a particular type.
+            </summary>
+            <param name="type">The <see cref="T:System.Type"/> for which the surrogate is requested.</param>
+            <param name="context">The streaming context.</param>
+            <param name="selector">The surrogate to use.</param>
+            <returns>The surrogate for a particular type.</returns>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="type"/> parameter is null. </exception>
+            <exception cref="T:System.Security.SecurityException">The caller does not have the required permission. </exception>
+            <PermissionSet>
+                <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+            </PermissionSet>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.TrackingEventArgs">
+            <summary>
+            Contains state information and event data associated with a tracking event.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.TrackingEventArgs.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Geocortex.Workflow.Runtime.TrackingEventArgs"/> class from being created.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.TrackingEventArgs.#ctor(System.Activities.Tracking.TrackingRecord)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.Runtime.TrackingEventArgs"/> class.
+            </summary>
+            <param name="record">The record.</param>
+            <exception cref="T:System.ArgumentNullException">If record is null.</exception>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.TrackingEventArgs.TrackingRecord">
+            <summary>
+            Gets the tracking record.
+            </summary>
+            <value>The tracking record.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.DefaultTrackingParticipant">
+            <summary>
+            A workflow extensions that interacts with the workflow tracking
+            infrastructure and provides access to tracking records.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.DefaultTrackingParticipant.Track(System.Activities.Tracking.TrackingRecord,System.TimeSpan)">
+            <summary>
+            When implemented in a derived class, defines the Track phase. The Track phase occurs when tracking 
+            records are generated by the workflow instance to which the tracking participant subscribes.
+            </summary>
+            <param name="record">The generated tracking record.</param>
+            <param name="timeout">The time period after which the provider aborts the attempt.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.DefaultTrackingParticipant.OnTrackingRecordReceived(System.Activities.Tracking.TrackingRecord,System.TimeSpan)">
+            <summary>
+            Raises the tracking record received event.
+            </summary>
+            <param name="record">The record.</param>
+            <param name="timeout">The timeout.</param>
+        </member>
+        <member name="E:Geocortex.Workflow.Runtime.DefaultTrackingParticipant.TrackingRecordReceived">
+            <summary>
+            Occurs when a tracking record is received.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.ExternalActivityExtension">
+            <summary>
+            A workflow extension that facilitates the transfer of <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/>s 
+            from an <see cref="T:Geocortex.Workflow.Activities.ExternalActivityBase"/> to the <see cref="T:Geocortex.Workflow.Runtime.WorkflowController"/>.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.ExternalActivityExtension.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.Runtime.ExternalActivityExtension"/> class.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.ExternalActivityExtension.ExternalActivities">
+            <summary>
+            Gets the external activities.
+            </summary>
+            <value>The external activities.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.Serialization.SerializationUtility">
+            <summary>
+            Provides utility methods related to serialization.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.ParseJsonObjectArray(System.String)">
+            <summary>
+            Take a string representing a Json array and return a list its element as Json strings.
+            </summary>
+            <param name="jsonString">Json string representing an array.</param>
+            <returns>List of json string items</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.JsonDecode(System.String)">
+            <summary>
+            Parses the string json into an object tree.
+            </summary>
+            <param name="json">A json string.</param>
+            <returns>An object tree representing the json structure.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.JsonEncode(System.Object)">
+            <summary>
+            Converts an object tree into a Json string.
+            </summary>
+            <param name="jsonObject">An object tree.</param>
+            <returns>A json string.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.Compress(System.String)">
+            <summary>
+            Take a string and performs compression on it.
+            </summary>
+            <param name="text">The text to compress.</param>
+            <returns>A compressed string.</returns>
+            <remarks>To be used in conjunction with Decompress.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.Decompress(System.String)">
+            <summary>
+            Take a compressed string and decompresses it.
+            </summary>
+            <param name="compressedText">The compressed string.</param>
+            <returns>An uncompressed string.</returns>
+            <remarks>To be used in conjunction with Compress.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromCollection(System.Collections.IEnumerable)">
+            <summary>
+            Takes a collection of objects and returns the Json representation.
+            </summary>
+            <param name="list">The collection of object.</param>
+            <returns>The collection represented as a Json string.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromString(System.String)">
+            <summary>
+            Take a string and return the Json representation.
+            </summary>
+            <param name="text">String to convert to Json.</param>
+            <returns>A Json string.</returns>
+            <remarks>Special characters will be escaped automatically to valid Json.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromBoolean(System.Boolean)">
+            <summary>
+            Gets the Json representation of a boolean value.
+            </summary>
+            <param name="value">The boolean value.</param>
+            <returns>The Json representation.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromException(System.Exception)">
+            <summary>
+            Get the Json representation of the exception.
+            </summary>
+            <param name="ex">The exception.</param>
+            <remarks>The actual Json representation matches ERSI's Json error format.</remarks>
+            <returns>A Json  of error data.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.ReformatJson(System.String,System.Boolean)">
+            <summary>
+            Reformats the Json input as pretty or optimized.
+            </summary>
+            <param name="json">The json.</param>
+            <param name="pretty">if set to <c>true</c> use pretty formatting.</param>
+            <returns>The reformatted Json.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromObjectWithHandlers(System.Object)">
+            <summary>
+            Takes an object and returns the Json representation. 
+            </summary>
+            <param name="value">Object to turn into Json.</param>
+            <returns>A Json string that represents the object.</returns>
+            <remarks>This method will use special handlers to handle some object types in a certain way. 
+            If no handler is used, than data contract serialization is used.</remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetObjectFromJsonObjectTreeWithHandlers(System.Object,System.Type)">
+            <summary>
+            This will take a json object tree and return an object of the specified type.
+            </summary>
+            <param name="json">Json object tree.</param>
+            <param name="objectType">The type of object to return.</param>
+            <returns>Return an object of the specified type.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetShortTypeName(System.String,System.Boolean)">
+            <summary>
+            Gets the short name of the type.
+            </summary>
+            <param name="typeName">Name of the type.</param>
+            <param name="includeAssemblyName">if set to <c>true</c> include assembly name.</param>
+            <returns>The short name.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetTypeFromName(System.String)">
+            <summary>
+            Try a few different ways to create a type from a type name.
+            </summary>
+            <param name="typeName">The type name.</param>
+            <returns>The type.</returns>
+            <remarks> 
+            1) Try the full type name
+            2) Try the class and assembly
+            3) Try the class
+            </remarks>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetObjectFromJsonObjectTreeWithHandlers(System.Object,System.Type,System.String)">
+            <summary>
+            This will take a json object tree and return an object of the specified type.
+            </summary>
+            <param name="json">Json object tree.</param>
+            <param name="objectType">The type of object to return.</param>
+            <param name="runtimeTypeName">The runtime type name of the object to return.</param>
+            <returns>Return an object of the specified type.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetEssentialsFeatureSetFromJson(System.String)">
+            <summary>
+            Gets the essentials feature set from json.
+            </summary>
+            <param name="json">The json.</param>
+            <returns>The EssentialsFeatureSet</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetFeatureSetFromJson(System.String)">
+            <summary>
+            Gets the feature set from json.
+            </summary>
+            <param name="json">The json.</param>
+            <returns>The <see cref="T:ESRI.ArcGIS.Client.Tasks.FeatureSet"/>.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetGeometryFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the Json object into an ESRI geometry object.
+            </summary>
+            <param name="json">The json object.</param>
+            <returns>ESRI Geometry object.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromGeometry(ESRI.ArcGIS.Client.Geometry.Geometry)">
+            <summary>
+            Get the Json representation from a Geometry object.
+            </summary>
+            <param name="geometry">The geometry object.</param>
+            <returns>The Json representation of a geometry object.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromFeatureSet(ESRI.ArcGIS.Client.Tasks.FeatureSet)">
+            <summary>
+            Gets the Json representation of a feature set.
+            </summary>
+            <param name="featureSet">The feature set.</param>
+            <returns>Json representation of the feature set.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromAddress(ESRI.ArcGIS.Client.Tasks.Address)">
+            <summary>
+            Get the Json representation of an Address object.
+            </summary>
+            <param name="address">The address.</param>
+            <returns>
+            The Json representation of the address object.
+            </returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJsonFromAddressCandidate(ESRI.ArcGIS.Client.Tasks.AddressCandidate)">
+            <summary>
+            Gets the Json representation of an AddressCandidate object.
+            </summary>
+            <param name="addressCandidate">The address candidate.</param>
+            <returns>
+            The Json representation of the address candidate object.
+            </returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetAddressFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the Json object into an ESRI Address object.
+            </summary>
+            <param name="json">The json object.</param>
+            <returns>ESRI Address object.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetSpatialReferenceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a SpatialReference.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The SpatialReference.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetTableDataSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a TableDataSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The TableDataSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetQueryDataSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a QueryDataSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The QueryDataSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetRasterDataSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a RasterDataSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The RasterDataSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetJoinDataSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a JoinDataSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The JoinDataSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetLayerSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a LayerSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The LayerSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetLayerMapSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a LayerMapSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The LayerMapSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetLayerDataSourceFromDictionary(System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Parse the JSON dictionary into a LayerDataSource.
+            </summary>
+            <param name="json">The JSON dictionary.</param>
+            <returns>The LayerDataSource.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.Serialization.SerializationUtility.GetValue``1(System.Collections.Generic.IDictionary{System.String,System.Object},System.String)">
+            <summary>
+            Safely gets the value of the specified type from the dictionary.
+            </summary>
+            <typeparam name="T">The type of value that is expected.</typeparam>
+            <param name="dictionary">The dictionary.</param>
+            <param name="key">The key.</param>
+            <returns>The value, or the default value of T if the value could not be obtained.</returns>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.WorkflowInfo">
+            <summary>
+            A workflow extension object that facilitates the transfer of information 
+            about a workflow to the workflow runtime. 
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.Runtime.WorkflowInfo.Uri">
+            <summary>
+            Gets or sets the URI of the workflow.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Utilities.RendererUtilities">
+            <summary>
+            Convenience methods for working with renderers.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Utilities.RendererUtilities.ApplyInfosToRenderer(ESRI.ArcGIS.Client.ClassBreaksRenderer,System.Collections.Generic.IEnumerable{ESRI.ArcGIS.Client.ClassBreakInfo})">
+            <summary>
+            Applies the <see cref="T:ESRI.ArcGIS.Client.ClassBreakInfo"/>s to the renderer and returns the renderer.
+            </summary>
+            <param name="renderer">The renderer.</param>
+            <param name="infos">The <see cref="T:ESRI.ArcGIS.Client.ClassBreakInfo"/>s to append.</param>
+            <returns>The modified renderer.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Utilities.RendererUtilities.ApplyInfosToRenderer(ESRI.ArcGIS.Client.UniqueValueRenderer,System.Collections.Generic.IEnumerable{ESRI.ArcGIS.Client.UniqueValueInfo})">
+            <summary>
+            Applies the <see cref="T:ESRI.ArcGIS.Client.UniqueValueInfo"/>s to the renderer and returns the renderer.
+            </summary>
+            <param name="renderer">The renderer.</param>
+            <param name="infos">The <see cref="T:ESRI.ArcGIS.Client.UniqueValueInfo"/>s to append.</param>
+            <returns>The modified renderer.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Utilities.RendererUtilities.ApplyInfosToRenderer(ESRI.ArcGIS.Client.UniqueValueMultipleFieldsRenderer,System.Collections.Generic.IEnumerable{ESRI.ArcGIS.Client.UniqueValueMultipleFieldsInfo})">
+            <summary>
+            Applies the <see cref="T:ESRI.ArcGIS.Client.UniqueValueMultipleFieldsInfo"/>s to the renderer and returns the renderer.
+            </summary>
+            <param name="renderer">The renderer.</param>
+            <param name="infos">The <see cref="T:ESRI.ArcGIS.Client.UniqueValueMultipleFieldsInfo"/>s to append.</param>
+            <returns>The modified renderer.</returns>
+        </member>
+        <member name="T:Geocortex.Workflow.WorkflowDefinition">
+            <summary>
+            A definition of a workflow to be used when configuring workflows.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowDefinition.DisplayName">
+            <summary>
+            Gets or sets the display name.
+            </summary>
+            <value>The display name.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowDefinition.ID">
+            <summary>
+            Gets or sets the ID.
+            </summary>
+            <value>The ID.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowDefinition.Uri">
+            <summary>
+            Gets or sets the URI of the workflow file.
+            </summary>
+            <value>The URI.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.SiteDefinition">
+            <summary>
+            A representation of a Geocortex Essentials Site.
+            </summary>
+        </member>
+        <member name="P:Geocortex.Workflow.SiteDefinition.Uri">
+            <summary>
+            Gets or sets the URI of the site.
+            </summary>
+            <value>The URI.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.SiteDefinition.Id">
+            <summary>
+            Gets or sets the id of the site.
+            </summary>
+            <value>The id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.SiteDefinition.Site">
+            <summary>
+            Gets or sets the actual site object.
+            </summary>
+            <value>The site.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.WorkflowException">
+            <summary>
+            Represents errors that occur during workflow execution.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowException.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowException"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowException.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowException.#ctor(System.String,System.Exception)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowException"/> class.
+            </summary>
+            <param name="message">The message.</param>
+            <param name="innerException">The inner exception.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowException"/> class.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is null. </exception>
+            <exception cref="T:System.Runtime.Serialization.SerializationException">The class name is null or <see cref="P:System.Exception.HResult"/> is zero (0). </exception>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowException.GetObjectData(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Sets the <see cref="T:System.Runtime.Serialization.SerializationInfo"/> with information about the exception.
+            </summary>
+            <param name="info">The <see cref="T:System.Runtime.Serialization.SerializationInfo"/> that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The <see cref="T:System.Runtime.Serialization.StreamingContext"/> that contains contextual information about the source or destination.</param>
+            <exception cref="T:System.ArgumentNullException">The <paramref name="info"/> parameter is a null reference (Nothing in Visual Basic). </exception>
+            <PermissionSet>
+                <IPermission class="System.Security.Permissions.FileIOPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Read="*AllFiles*" PathDiscovery="*AllFiles*"/>
+                <IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="SerializationFormatter"/>
+            </PermissionSet>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowException.DisplayMessage">
+            <summary>
+            Gets or sets the display message.
+            </summary>
+            <value>The display message.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.WorkflowState">
+            <summary>
+            A representation of a workflow.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowState"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.LoadWorkflowFromUri(System.Uri)">
+            <summary>
+            Load a workflow from a specified Uri.
+            </summary>
+            <param name="uri">The Uri to the workflow.</param>
+            <returns>The workflow as an activity.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.#ctor(System.Uri)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowState"/> class.
+            </summary>
+            <param name="uri">The URI.</param>
+            <exception cref="T:System.ArgumentNullException">If uri is null.</exception>
+            <exception cref="T:System.ArgumentException">If uri is an empty string ("").</exception>
+            <exception cref="T:System.InvalidOperationException">If uri is relative.</exception>
+            <exception cref="T:System.IO.FileNotFoundException">The file cannot be found.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">The specified path is invalid, such as being on an unmapped drive.</exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurs, or the path includes an incorrect or invalid syntax for file name, directory name, or volume label.</exception>
+            <exception cref="T:System.OutOfMemoryException">There is insufficient memory to allocate a buffer for activity.</exception>
+            <exception cref="T:Geocortex.Workflow.WorkflowException">If the workflow could not be loaded.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.#ctor(System.Uri,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowState"/> class.
+            </summary>
+            <param name="uri">The URI.</param>
+            <param name="json">The json.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowState"/> class.
+            </summary>
+            <param name="json">The json representation of the workflow.</param>
+            <exception cref="T:System.ArgumentNullException">If json is null.</exception>
+            <exception cref="T:System.FormatException">If json is not a valid Json string.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.#ctor(System.Activities.Activity)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.WorkflowState"/> class.
+            </summary>
+            <param name="activity">The activity to load as a workflow.</param>
+            <exception cref="T:System.ArgumentNullException">If activity is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.SetFailedException(System.Exception)">
+            <summary>
+            Process and unhandled exception and set the workflow status to Failed.
+            </summary>
+            <param name="ex">The unhandled exception.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.UpdateArgumentInfoCollection(Geocortex.Core.Collections.EnhancedCollection{Geocortex.Workflow.ArgumentInfo},System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Takes a collection of ArgumentInfo and updates their values with the values from a dictionary of object.
+            </summary>
+            <param name="argumentInfoCollection">The collection to update.</param>
+            <param name="data">The actual values to use.</param>
+            <returns>An up to date collection of ArgumentInfo.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.WorkflowState.ToJson">
+            <summary>
+            Converts the members of the class to a JSON string, and returns it.
+            </summary>
+            <returns>The JSON representation of this object.</returns>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.InstanceId">
+            <summary>
+            Gets or sets the unique workflow instance id.
+            </summary>
+            <value>The instance id.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.Status">
+            <summary>
+            Gets or sets the status.
+            </summary>
+            <value>The status.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.PendingExternalActivities">
+            <summary>
+            Gets the pending external activities.
+            </summary>
+            <value>The pending external activities.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.Outputs">
+            <summary>
+            Gets the outputs.
+            </summary>
+            <value>The outputs.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.InstanceData">
+            <summary>
+            Gets or sets the instance data.
+            </summary>
+            <value>The instance data.</value>
+        </member>
+        <member name="P:Geocortex.Workflow.WorkflowState.FailedException">
+            <summary>
+            Gets the failed exception that will contain any error thrown during the execution of the workflow.
+            </summary>
+            <value>The failed exception.</value>
+        </member>
+        <member name="T:Geocortex.Workflow.WorkflowStatus">
+            <summary>
+            An enumeration of the states of a <see cref="T:Geocortex.Workflow.WorkflowState"/>.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.NotStarted">
+            <summary>
+            The workflow has not started.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.Running">
+            <summary>
+            The workflow is running.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.Idle">
+            <summary>
+            The workflow is idle.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.WaitingForExternalActivities">
+            <summary>
+            The workflow is waiting for external activities to complete.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.Completed">
+            <summary>
+            The workflow has completed.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.WorkflowStatus.Failed">
+            <summary>
+            The workflow has failed.
+            </summary>
+        </member>
+        <member name="T:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore">
+            <summary>
+            This class provides an implementation of the <see cref="T:System.Runtime.DurableInstancing.InstanceStore"/> class that 
+            uses the <see cref="T:Geocortex.Workflow.WorkflowState"/>s <see cref="P:WorkflowState.InstanceData"/> as the durable store.
+            </summary>
+        </member>
+        <member name="F:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore._serializer">
+            <summary>
+            A single lazily created instance of the serializer.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore.#ctor">
+            <summary>
+            Prevents a default instance of the <see cref="T:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore"/> class from being created.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore.#ctor(Geocortex.Workflow.WorkflowState)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore"/> class.
+            </summary>
+            <param name="workflow">The workflow.</param>
+            <exception cref="T:System.ArgumentNullException">If workflow is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore.TryCommand(System.Runtime.DurableInstancing.InstancePersistenceContext,System.Runtime.DurableInstancing.InstancePersistenceCommand,System.TimeSpan)">
+            <summary>
+            A persistence provider implements this method, which determines whether a particular persistence 
+            command can be executed and if the command can be executed executes it asynchronously.
+            </summary>
+            <param name="context">The instance  context.</param>
+            <param name="command">The command to be executed.</param>
+            <param name="timeout">Timeout value for the operation.</param>
+            <returns>
+            A persistence provider implementation should return false if it doesn’t support the 
+            command passed as a parameter; otherwise it should return true or throw an exception.
+            </returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore.BeginTryCommand(System.Runtime.DurableInstancing.InstancePersistenceContext,System.Runtime.DurableInstancing.InstancePersistenceCommand,System.TimeSpan,System.AsyncCallback,System.Object)">
+            <summary>
+            A persistence provider implements this method, which determines whether a particular persistence 
+            command can be executed. If the command can be executed, executes the command asynchronously.
+            </summary>
+            <param name="context">The instance context.</param>
+            <param name="command">The persistence command to be executed.</param>
+            <param name="timeout">The timeout value for the command execution.</param>
+            <param name="callback">The asynchronous callback delegate that receives notification of the completion of the asynchronous operation.</param>
+            <param name="state">The state information.</param>
+            <returns>The state of the asynchronous operation.</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.WorkflowStateInstanceStore.EndTryCommand(System.IAsyncResult)">
+            <summary>
+            Ends an asynchronous operation.
+            </summary>
+            <param name="result">The result of the operation.</param>
+            <returns>
+            A persistence provider implementation should return false if it doesn’t support the command 
+            passed to the BeginTryCommand method. Otherwise it should return true or throw an exception.
+            </returns>
+        </member>
+        <member name="T:Geocortex.Workflow.Persistence.DefaultPersistenceParticipant">
+            <summary>
+            This class provides a default implementation of the <see cref="T:System.Activities.Persistence.PersistenceParticipant"/> class.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.DefaultPersistenceParticipant.CollectValues(System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}@,System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object}@)">
+            <summary>
+            A host invokes this method on a custom persistence participant to collect read-write values and write-only values, to be persisted.
+            </summary>
+            <param name="readWriteValues">The read-write values to be persisted.</param>
+            <param name="writeOnlyValues">The write-only values to be persisted.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Persistence.DefaultPersistenceParticipant.PublishValues(System.Collections.Generic.IDictionary{System.Xml.Linq.XName,System.Object})">
+            <summary>
+            The host invokes this method and passes all the loaded values in the <see cref="P:System.Activities.Persistence.SaveWorkflowCommand.InstanceData"/> collection (filled by the <see cref="T:System.Activities.Persistence.LoadWorkflowCommand"/> or <see cref="T:System.Activities.Persistence.LoadWorkflowByInstanceKeyCommand"/>) as a dictionary parameter.
+            </summary>
+            <param name="readWriteValues">The read-write values that were loaded from the persistence store. This dictionary should match the dictionary of read-write values persisted in the recent persistence episode.</param>
+        </member>
+        <member name="T:Geocortex.Workflow.Runtime.WorkflowController">
+            <summary>
+            A utility class that executes workflows and provides metadata about them.
+            </summary>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.Initialize">
+            <summary>
+            Initializes this instance by ensuring there is a current application running on an STA thread.
+            </summary>
+            <exception cref="T:System.InvalidOperationException">If <see cref="P:System.Windows.Application.Current"/> 
+            is null and the current thread's <see cref="T:System.Threading.ApartmentState"/> is STA.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetWorkflowMetadata(System.Uri,System.Boolean)">
+            <summary>
+            Get the metadata about the workflow.
+            </summary>
+            <param name="uri">Uri to the workflow.</param>
+            <param name="includeChildren">if set to <c>true</c> [include child activities].</param>
+            <returns>A representation of the workflow.</returns>
+            <exception cref="T:System.ArgumentNullException">If workflow is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetWorkflowMetadata(Geocortex.Workflow.WorkflowState,System.Boolean)">
+            <summary>
+            Get the metadata about the workflow.
+            </summary>
+            <param name="workflow">The workflow.</param>
+            <param name="includeChildren">if set to <c>true</c> [include child activities].</param>
+            <returns>A representation of the workflow.</returns>
+            <exception cref="T:System.ArgumentNullException">If workflow is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetWorkflowMetadata(System.Activities.Activity,System.Boolean)">
+            <summary>
+            Get the metadata about the workflow.
+            </summary>
+            <param name="activity">The workflow as an activity</param>
+            <param name="includeChildren">if set to <c>true</c> [include child activities].</param>
+            <returns>A representation of the workflow.</returns>
+            <exception cref="T:System.ArgumentNullException">If workflow is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetActivityInfo(System.Activities.Activity,System.Boolean)">
+            <summary>
+            Get the metadata about the activity.
+            </summary>
+            <param name="activity">The activity.</param>
+            <param name="includeChildren">Indicates if child activities should be included.</param>
+            <returns>The activity metadata.</returns>
+            <exception cref="T:System.ArgumentNullException">If activity is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetActivityInfo(System.Activities.Activity,System.Boolean,System.Activities.ActivityContext,System.String)">
+            <summary>
+            Get the metadata about the activity.
+            </summary>
+            <param name="activity">The activity.</param>
+            <param name="includeChildren">Indicates if child activities should be included.</param>
+            <param name="context">The running activity context.</param>
+            <param name="syncToken">The sync token.</param>
+            <returns>The activity metadata.</returns>
+            <exception cref="T:System.ArgumentNullException">If activity is null.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.IsExternalActivity(System.Activities.Activity)">
+            <summary>
+            Determines whether the specified activity is an external activity.
+            </summary>
+            <remarks>
+            An external activity is any activity that extends ExternalActivityBase or ExternalActivityBase&lt;T&gt;.
+            </remarks>
+            <param name="activity">The activity.</param>
+            <returns>
+            <c>true</c> if the specified activity is an external activity; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.RunWorkflow(Geocortex.Workflow.WorkflowState,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            Run the specified workflow with inputs.
+            </summary>
+            <param name="workflow">The workflow to run.</param>
+            <param name="inputs">The input arguments.</param>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.RunWorkflow(Geocortex.Workflow.WorkflowState,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IEnumerable{System.Object})">
+            <summary>
+            Run the specified workflow with inputs and extensions.
+            </summary>
+            <param name="workflow">The workflow to run.</param>
+            <param name="inputs">The input arguments.</param>
+            <param name="extensions">The extensions to be attached to the workflow.</param>
+            <remarks>
+            If the workflow cannot run, either due to bad input or invalid state an exception will be thrown.
+            If the workflow can run, but an activity throws an uncaught exception the workflow will complete, but 
+            it's status will indicate that it failed and the FailedException property will contain the reason.
+            </remarks>
+            <exception cref="T:System.ArgumentNullException">If workflow is null.</exception>
+            <exception cref="T:System.InvalidOperationException">If the workflow's status is not <see cref="F:Geocortex.Workflow.WorkflowStatus.NotStarted"/> 
+            or <see cref="F:Geocortex.Workflow.WorkflowStatus.WaitingForExternalActivities"/>.</exception>
+            <exception cref="T:System.InvalidOperationException">If the workflow's status is <see cref="F:Geocortex.Workflow.WorkflowStatus.WaitingForExternalActivities"/> 
+            but the workflow contains no resumable <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/>s.</exception>
+            <exception cref="T:Geocortex.Workflow.WorkflowException">The workflow could not be loaded from the persistence provider.</exception>
+            <exception cref="T:System.Activities.WorkflowApplicationException">The <see cref="T:Geocortex.Workflow.ExternalActivityInfo"/>'s bookmark could not be resumed.</exception>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetRuntimeArgumentArgument(System.Activities.RuntimeArgument)">
+            <summary>
+            Retrieves the actual Argument from a RuntimeArgument. 
+            </summary>
+            <param name="runtimeArgument">The RuntimeArgument to process</param>
+            <returns>The argument</returns>
+        </member>
+        <member name="M:Geocortex.Workflow.Runtime.WorkflowController.GetRuntimeArguments(System.Activities.Activity)">
+            <summary>
+            Access the internal RuntimeArguments property of Activity to get the list of RuntimeArgument.
+            </summary>
+            <param name="activity">The Activity to process</param>
+            <returns>The list of runtime arguments.</returns>
+        </member>
+    </members>
+</doc>
